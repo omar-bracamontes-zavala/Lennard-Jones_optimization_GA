@@ -7,25 +7,4 @@ The tested error functions are:
 - [Rastrigin function](https://www.sfu.ca/~ssurjano/rastr.html)
 - [Schwefel function](https://www.sfu.ca/~ssurjano/schwef.html)
 
-##FlowChart
-
-```flow
-st=>start: Generate initial population
-op1=>operation: Evaluate
-cond1=>condition: Done Yes or No? (TerminationCriteria)
-op2=>operation: Crossover
-op3=>operation: Mutation
-cond2=>condition: Successful individual?
-op4=>operation: Selection
-op5=>operation: Replacement
-op6=>operation: Local technique
-e=>end: Stop and plot
-
-st->op1->cond1
-cond1(no)->op2->op3->cond2
-cond1(yes)->e
-cond2(yes)->op4->op5->op6->op1
-cond2(no)->e
-
-```
  
