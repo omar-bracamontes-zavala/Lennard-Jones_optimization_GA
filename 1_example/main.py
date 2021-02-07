@@ -210,7 +210,7 @@ def main():
         _evaluated = evaluate(population, errf)
         population_errors = [indiv[0] for indiv in _evaluated]
         evaluated_population = [indiv[1] for indiv in _evaluated]
-
+        # Logs
         bests_individual_per_generation.append(evaluated_population[0])
         worsts_individual_per_generation.append(evaluated_population[-1])
         mean_individual_error_per_generation.append( np.mean(population_errors) )
@@ -233,7 +233,7 @@ def main():
         generation += 1
 
     logger.info(f'\nElite:\n{bests_individual_per_generation[-1]}')
-
+    # Plots
     plot_errors(generations, mean_individual_error_per_generation, bests_individual_error_per_generation, save=True)
 
 if __name__ == '__main__':
