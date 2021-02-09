@@ -1,19 +1,12 @@
 from numpy import exp, sin, cos, sqrt, pi
-import logging
-logging.basicConfig(level=logging.INFO)
-
-logger = logging.getLogger(__name__)
-
 
 def sphere(individual):
     return sum(individual**2)
 
 
-def trans_sphere(individual, origin):
-    try:
-        return sum((individual - origin)**2)
-    except ValueError as e:
-        logger.warning('Numpy Array dimensions must agree')
+def trans_sphere(individual):
+    origin =  individual*0 + 2
+    return sum((individual - origin)**2)
 
 
 def rosenbrock(individual):
