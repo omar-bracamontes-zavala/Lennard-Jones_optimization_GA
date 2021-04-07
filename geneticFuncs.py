@@ -49,10 +49,11 @@ def evaluate(population, errf):
     evaluated = [( errf(indiv), indiv ) for indiv in population]
     return sorted(evaluated, key=lambda tup:tup[0])
 
-def termination_criteria(errors, epsilon, iteration, itermax):
+def termination_criteria(errors_per_iter, errors, epsilon, iteration, itermax):
     '''
     THE ALGORITHM TERMINATES IF THE CRITERIA IS TRUE.
 
+    errors_per_iterlist. List of lists. #se puede mejorar pero por lo pronto asi
     errors list. A sorted (ASC) list.
     epsilon float. Termination criteria
     iteration int. Current iteration
@@ -61,9 +62,17 @@ def termination_criteria(errors, epsilon, iteration, itermax):
     RETURNS.
     boolean
     '''
-    if iteration >= itermax:
-        logger.info('\nTerminationCriteria: iteration>=itermax\n')
+
+    if (iteration > itermax):
+        #logger.info('\nTerminationCriteria: iter>itermax\n')
         return True
+    #elif (abs( np.min(errors)-np.max(errors) ) < epsilon) and np.min(errors)<0:
+        #logger.info('\nTerminationCriteria: |f_l - f_h| < e\n')
+        #return True
+    #elif iteration > 0:
+    #    if np.var(errors_per_iter[iteration])  < (np.var(errors_per_iter[iteration-1])/3.) and np.min(errors)<0:
+    #        logger.info('\nTerminationCriteria: var_i < var_{i-1}/2\n')
+    #        return True
     else:
         return False
 
@@ -148,7 +157,7 @@ def plot_errors(generations, means, bests, worsts, str_error_function, n_dim, N,
     fig, ax = plt.subplots()
     fig.suptitle(f'Optimizing {str_error_function} in R^{n_dim} with GA\n N={N}\nBestError: {bests[-1]}')
 
-    ax.plot(generations, means,'b', alpha=0.8, label='Mean Error')
+    #ax.plot(generations, means,'b', alpha=0.8, label='Mean Error')
     ax.plot(generations, bests,'g', alpha=1.0, label="Elite Error")
     #ax.plot(generations, worsts,'r', alpha=0.6, label="Dreg Error")
 
@@ -166,3 +175,9 @@ def save_results_csv(bests_individual_per_generation,bests_individual_error_per_
         final_best_dict = {'positions':bests_individual_per_generation[-1]}
         final_best = pd.DataFrame(final_best_dict)
         final_best.to_csv('/home/omar/Documentos/Modulares/M_1/logs/{}N_E{}_g{}_p{}.csv'.format(N,bests_individual_error_per_generation[-1],itermax,N_individuals), sep = ' ', index = False)
+
+def distance(r_1, r_2):
+    '''
+    ABLE TO CALCULATE EUCLIDEAN DISTANCE
+    '''
+    return np.sqrt(sum((r_2 - r_1)**2))
