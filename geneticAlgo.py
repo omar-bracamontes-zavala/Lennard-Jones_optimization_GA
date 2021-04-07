@@ -14,12 +14,13 @@ def geneticAlgorithm(errf, str_error_function, lower_bound, upper_bound, p_1, p_
 
     generation = 0
     finished = False
-    epsilon = M_gens/N_individuals # For termination criteria
+    epsilon = 10**(-14)#M_gens/N_individuals # For termination criteria
 
     logger.info('\nInitializePopulation\n')
 
     # Logs
     generations = []
+    all_errors_per_generation = [] #se puede mejorar pero por lo pronto asi
     bests_individual_per_generation = []
     worsts_individual_per_generation = []
     mean_individual_error_per_generation = []
@@ -35,14 +36,14 @@ def geneticAlgorithm(errf, str_error_function, lower_bound, upper_bound, p_1, p_
         population_errors = [indiv[0] for indiv in _evaluated]
         evaluated_population = [indiv[1] for indiv in _evaluated]
         # Logs
+        all_errors_per_generation.append(population_errors) #se puede mejorar pero por lo pronto asi
         bests_individual_per_generation.append(evaluated_population[0])
         worsts_individual_per_generation.append(evaluated_population[-1])
         mean_individual_error_per_generation.append( np.mean(population_errors) )
         bests_individual_error_per_generation.append( np.min(population_errors) )
         worsts_individual_error_per_generation.append( np.max(population_errors) )
-
         # Termination criteria
-        finished = gaf.termination_criteria(population_errors, epsilon, generation, itermax)
+        finished = gaf.termination_criteria(all_errors_per_generation,population_errors, epsilon, generation, itermax)
         # Crossover
         childs = gaf.crossover(evaluated_population, M_gens//2, M_gens, N_individuals)
         # Mutation
@@ -56,8 +57,8 @@ def geneticAlgorithm(errf, str_error_function, lower_bound, upper_bound, p_1, p_
         generation += 1
 
     # Print logs
-    print(f'\n----\t{str_error_function}: particles: {N}\t----')
-    print(f'\nDimension: {n_dim}\t | Generation: {generations[-1]}\nEliteError: {bests_individual_error_per_generation[-1]}\nElite:\n{bests_individual_per_generation[-1]}\n')
+    print(f'\n----\tParticles N = {N}\t----')
+    print(f'\nEnergy: {bests_individual_error_per_generation[-1]}\nSolution:\n{bests_individual_per_generation[-1]}\n')
 
     # Plot results
     gaf.plot_errors(generations, mean_individual_error_per_generation, bests_individual_error_per_generation, worsts_individual_error_per_generation,str_error_function, n_dim, N, save)
